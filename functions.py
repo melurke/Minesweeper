@@ -15,9 +15,8 @@ def scan_field(x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, s
     field = [""] * 16
     empty_field = False
     for f in new_fields:
-        col = color(f[0], f[1])
-        if col == "/":
-            empties.append(f)
+        if color(f[0], f[1]) == "/":
+            empty_field = True
     if empty_field:
         for y in y_pos:
             for x in x_pos:
@@ -62,6 +61,8 @@ def scan_field(x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, s
                         col = "8"
                     elif (x_pos.index(x)+1, y_pos.index(y)+1) in empties:
                         col = "/"
+                    else:
+                        col = "0"
                 field[y_pos.index(y)] += col
     else:
         for y in y_pos:
