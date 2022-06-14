@@ -44,6 +44,7 @@ while True:
         elif col == "8":
             eights.append(pi)
         known.append(pi)
+
     if not first_round:
         if clicked:
             field = f.scan_field(x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, sixes, sevens, eights, flags, new_fields)
@@ -193,7 +194,7 @@ while True:
             y_coord = y_pos[C[1]-1]
 
             n = f.no_mines(f.neighbors(x_coord, x_pos, y_coord, y_pos), x_pos, y_pos, known, flags, num_of_neighbors)
-
+            
             if n[1]:
                 for E in n[0]:
                     pyautogui.leftClick(E[0], E[1])
