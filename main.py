@@ -1,4 +1,5 @@
 import pyautogui
+import time
 import functions as f
 
 x_pos = [69, 97, 125, 153, 181, 209, 237, 265, 293, 321, 349, 377, 405, 433, 461, 489, 517, 545, 573, 601, 629, 657, 685, 713, 741, 769, 797, 825, 853, 881]
@@ -17,6 +18,7 @@ known = []
 clicked = True
 
 while pyautogui.locateOnScreen("smiley.png") == None:
+    pyautogui.moveTo(1000, 500)
     field = [""] * 16
     if clicked:
         field = f.scan_field(x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, sixes, sevens, flags)
@@ -45,70 +47,79 @@ while pyautogui.locateOnScreen("smiley.png") == None:
                     field[y] += "0"
     for row in field:
         print(row)
+    print("")
+    print("")
     clicked = False
 
     known = flags + ones + twos + threes + fours + sixes + sevens + empties
     known = list(dict.fromkeys(known))
     known.sort()
-    print(known)
 
     for C in known.copy():
+        pass_field = False
         num_of_neighbors = 0
         if C in flags or C in empties:
-            pass
-        if C in ones:
-            num_of_neighbors = 1
-        elif C in twos:
-            num_of_neighbors = 2
-        elif C in threes:
-            num_of_neighbors = 3
-        elif C in fours:
-            num_of_neighbors = 4
-        elif C in fives:
-            num_of_neighbors = 5
-        elif C in sixes:
-            num_of_neighbors = 6
-        elif C in sevens:
-            num_of_neighbors = 7
+            pass_field = True
+        if not pass_field:
+            if C in ones:
+                num_of_neighbors = 1
+            elif C in twos:
+                num_of_neighbors = 2
+            elif C in threes:
+                num_of_neighbors = 3
+            elif C in fours:
+                num_of_neighbors = 4
+            elif C in fives:
+                num_of_neighbors = 5
+            elif C in sixes:
+                num_of_neighbors = 6
+            elif C in sevens:
+                num_of_neighbors = 7
+            
+            x_coord = x_pos[C[0]-1]
+            y_coord = y_pos[C[1]-1]
+
+            n = f.flags(f.neighbors(x_coord, x_pos, y_coord, y_pos), num_of_neighbors, x_pos, y_pos, known, flags)
+            
+            if n[1]:
+                for E in n[0]:
+                    x_coord = x_pos[E[0]]
+                    y_coord = y_pos[E[1]]
+                    pyautogui.rightClick(x_coord, y_coord)
+                    flags.append((E[0]+1, E[1]+1))
+                    known.append((E[0]+1, E[1]+1))
         
-        x_coord = x_pos[C[0]-1]
-        y_coord = y_pos[C[1]-1]
-
-        n = f.flags(f.neighbors(x_coord, x_pos, y_coord, y_pos), num_of_neighbors, x_pos, y_pos, known, flags)
-        print("Flags", n)
-        if n[1]:
-            for E in n[0]:
-                x_coord = x_pos[E[0]]
-                y_coord = y_pos[E[1]]
-                pyautogui.rightClick(x_coord, y_coord)
-                flags.append((E[0]+1, E[1]+1))
-                known.append((E[0]+1, E[1]+1))
-    
     for C in known.copy():
+        pass_field = False
         num_of_neighbors = 0
+
         if C in flags or C in empties:
-            pass
-        if C in ones:
-            num_of_neighbors = 1
-        elif C in twos:
-            num_of_neighbors = 2
-        elif C in threes:
-            num_of_neighbors = 3
-        elif C in fours:
-            num_of_neighbors = 4
-        elif C in fives:
-            num_of_neighbors = 5
-        elif C in sixes:
-            num_of_neighbors = 6
-        elif C in sevens:
-            num_of_neighbors = 7
+            pass_field = True
+        if not pass_field:
+            if C in ones:
+                num_of_neighbors = 1
+            elif C in twos:
+                num_of_neighbors = 2
+            elif C in threes:
+                num_of_neighbors = 3
+            elif C in fours:
+                num_of_neighbors = 4
+            elif C in fives:
+                num_of_neighbors = 5
+            elif C in sixes:
+                num_of_neighbors = 6
+            elif C in sevens:
+                num_of_neighbors = 7
 
-        x_coord = x_pos[C[0]-1]
-        y_coord = y_pos[C[1]-1]
+            x_coord = x_pos[C[0]-1]
+            y_coord = y_pos[C[1]-1]
 
-        n = f.no_mines(f.neighbors(x_coord, x_pos, y_coord, y_pos), x_pos, y_pos, known, flags, num_of_neighbors)
-        print(n)
-        if n[1]:
-            for E in n[0]:
-                pyautogui.leftClick(E[0], E[1])
-                clicked = True
+            n = f.no_mines(f.neighbors(x_coord, x_pos, y_coord, y_pos), x_pos, y_pos, known, flags, num_of_neighbors)
+
+            if n[1]:
+                for E in n[0]:
+                    pyautogui.leftClick(E[0], E[1])
+                    clicked = True
+    if pyautogui.locateOnScreen("smiley.png") != None:
+        break
+    time.sleep(1)
