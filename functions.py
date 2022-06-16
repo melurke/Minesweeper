@@ -196,11 +196,9 @@ def guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives,
             for N in n:
                 if N in flags:
                     num_of_used_flags += 1
-                elif N in empty:
+                elif N in empties:
                     num_of_free_neighbors += 1
                     empty_n.append(N)
-            print(C)
-            print(empty_n)
             num_of_free_flags = num_of_flags - num_of_used_flags
             try:
                 p = num_of_free_flags / num_of_free_neighbors
@@ -208,13 +206,11 @@ def guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives,
                 p = 20
             # FIXME:
             for N in empty_n:
-                x_coord = N[0]
-                y_coord = N[1]
+                x_coord = x_pos.index(N[0])
+                y_coord = y_pos.index(N[1])
                 probabilities[y_coord*16+x_coord][0] += p
                 probabilities[y_coord*16+x_coord][1] += 1
-                print(probabilities[y_coord*16+x_coord])
     new_probabilities = []
-    print(probabilities)
     for b in probabilities.copy():
         try:
             c = b[0] / b[1]
