@@ -25,8 +25,7 @@ def rightClick(x, y):
     time.sleep(0.02)
     win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0)
 
-def scan_field(img, x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, sixes, sevens, eights, flags, new_fields):
-    field = ""
+def scan_field(img, x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, sixes, sevens, eights, new_fields):
     empty_field = False
     empty_fields = []
     for f in new_fields:
@@ -34,13 +33,6 @@ def scan_field(img, x_pos, y_pos, known, empties, ones, twos, threes, fours, fiv
             empty_field = True
             empty_fields.append(f)
     if empty_field:
-        print("Scan neighbors of empty fields")
-        field = "/" * 480
-        for C in known:
-            x_coord = x_pos.index(C[0])
-            y_coord = y_pos.index(C[1])
-            T = type(C[0], C[1], known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags)
-            field = field[:y_coord*30+x_coord] + T + field[y_coord*30+x_coord+1:]
         for C in empty_fields:
             n = neighbors(C[0], x_pos, C[1], y_pos)
             for N in n:
@@ -66,17 +58,6 @@ def scan_field(img, x_pos, y_pos, known, empties, ones, twos, threes, fours, fiv
                     elif col == "8":
                         eights.append(N)
                     known.append(N)
-                    
-                    x_coord = x_pos.index(N[0])
-                    y_coord = y_pos.index(N[1])
-                    field = field[:y_coord*20+x_coord] + col + field[y_coord*30+x_coord+1:]
-    else:
-        print("Scan neighbors")
-        for y in y_pos:
-            for x in x_pos:
-                col = type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags)
-                field += col
-    return field
 
 def color(img, x, y):
     col = img.getpixel((x, y))
@@ -202,14 +183,17 @@ def guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives,
     new_probabilities = []
     for b in probabilities.copy():
         try:
-            c = round(b[0] / b[1], 2)
+            c = b[0] / b[1]
         except ZeroDivisionError:
             c = 1
         new_probabilities.append(c)
     min_index = new_probabilities.index(min(new_probabilities))
     x_index = min_index % 30
     y_index = int((min_index-x_index)/16)
-    coords = (x_pos[x_index], y_pos[y_index])
-    print(new_probabilities)
-    print(f"{x_index}, {y_index}: {new_probabilities[min_index]}")
-    return coords
+    try:
+        coords = (x_pos[x_index], y_pos[y_index])
+        print(new_probabilities)
+        print(f"{x_index}, {y_index}: {new_probabilities[min_index]}")
+        return coords
+    except:
+        return
