@@ -17,7 +17,7 @@ sevens = []
 eights = []
 empties = []
 known = []
-new_fields = []
+new_fields = [(461, 429)]
 clicked = True
 first_round = True
 end_game = False
@@ -25,7 +25,7 @@ no_more_moves = False
 
 while not keyboard.is_pressed('k'):
     f.leftClick(474, 174)
-    f.leftClick(459, 430)
+    f.leftClick(461, 429)
     time.sleep(0.2)
     while not keyboard.is_pressed('l'): # Press l to generate a new starting position / Press and hold k and then press l to use the given starting position
         time.sleep(0.05)
@@ -110,8 +110,9 @@ while True:
             new_fields += n[0]
             if n[1]:
                 clicked = True
+                no_more_moves = False
 
-    if known == known_fields  and no_more_moves:
+    if known == known_fields and no_more_moves:
         print("Taking guess:")
         guess = f.guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights)
         try:
