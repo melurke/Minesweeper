@@ -1,6 +1,7 @@
 import pyautogui
 import functions as f
 import keyboard
+import time
 
 x_pos = [69, 97, 125, 153, 181, 209, 237, 265, 293, 321, 349, 377, 405, 433, 461, 489, 517, 545, 573, 601, 629, 657, 685, 713, 741, 769, 797, 825, 853, 881]
 y_pos = [233, 261, 289, 317, 345, 373, 401, 429, 457, 485, 513, 541, 569, 597, 625, 653]
@@ -20,11 +21,18 @@ new_fields = []
 clicked = True
 first_round = True
 end_game = False
+no_more_moves = False
+
+while not keyboard.is_pressed('k'):
+    f.leftClick(474, 174)
+    f.leftClick(459, 430)
+    time.sleep(0.2)
+    while not keyboard.is_pressed('l'): # Press l to generate a new starting position / Press and hold k and then press l to use the given starting position
+        time.sleep(0.05)
 
 while True:
     img = pyautogui.screenshot("field.png")
     pyautogui.moveTo(1000, 500)
-    field = ""
     for pi in new_fields:
         col = f.color(img, pi[0], pi[1])
         if col == "0":
@@ -49,14 +57,8 @@ while True:
 
     if not first_round:
         if clicked:
-            field = f.scan_field(img, x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, sixes, sevens, eights, flags, new_fields)
-        else:
-            print("Get known fields")
-            for y in y_pos:
-                for x in x_pos:
-                    field += f.type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags)
+            f.scan_field(img, x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, sixes, sevens, eights, new_fields)
     else:
-        print("Scan full field")
         for y in y_pos:
             for x in x_pos:
                 if not (x, y) in known:
@@ -79,10 +81,6 @@ while True:
                         sevens.append((x, y))
                     elif col == "8":
                         eights.append((x, y))
-                else:
-                    col = f.type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags)
-                field += col
-    print("")
     known_fields = known.copy()
 
     clicked = False
@@ -112,14 +110,20 @@ while True:
             new_fields += n[0]
             if n[1]:
                 clicked = True
- 
-    if known == known_fields:
+
+    if known == known_fields  and no_more_moves:
         print("Taking guess:")
         guess = f.guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights)
-        f.leftClick(guess[0], guess[1])
+        try:
+            f.leftClick(guess[0], guess[1])
+        except:
+            pass
         break
+    elif known == known_fields:
+        no_more_moves = True
     if keyboard.is_pressed('q'):
         break
     first_round = False
+f.leftClick(1000, 500)
 print("")
 print("The game ended!")
