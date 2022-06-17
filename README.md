@@ -1,6 +1,7 @@
 # Minesweeper
 
 Bot that plays Minesweeper on https://minesweeperonline.com/
+The game should be played with the compiler in the right half of the screen and the website on the left halgf.
 
 main.py -> Main program that plays the game
 
