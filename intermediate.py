@@ -4,14 +4,13 @@ import functions as f
 import keyboard
 import time
 
-x_pos = [69, 97, 125, 153, 181, 209, 237, 265, 293, 321, 349, 377, 405, 433, 461, 489, 517, 545, 573, 601, 629, 657, 685, 713, 741, 769, 797, 825, 853, 881]
-y_pos = [233, 261, 289, 317, 345, 373, 401, 429, 457, 485, 513, 541, 569, 597, 625, 653]
-first_round = True
+x_pos = [76, 104, 132, 160, 188, 216, 244, 272, 300, 328, 356, 384, 412, 440, 468, 496]
+y_pos = [235, 263, 291, 319, 347, 375, 403, 431, 459, 487, 515, 543, 571, 599, 627, 655]
 end_game = False
 
 while True:
-    f.leftClick(474, 174)
-    f.leftClick(461, 429)
+    f.leftClick(287, 174)
+    f.leftClick(272, 429)
     time.sleep(0.2)
     while not keyboard.is_pressed('l') and not keyboard.is_pressed('k'): # Press l to generate a new starting position / Press k to use the given starting position
         time.sleep(0.02)
@@ -38,6 +37,13 @@ while True:
 
     field = f.scan_field(img, x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, sixes, sevens, eights, flags)
     for row in field:
+        if "S" in row:
+            end_game = True
+
+    if end_game:
+        break
+    
+    for row in field:
         print(row)
     print("")
     print("")
@@ -61,11 +67,8 @@ while True:
         print("Taking guess:")
         guess = f.guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights)
         f.leftClick(guess[0], guess[1])
-        if img[guess[0]-10, guess[1]-8][0:3] == (255, 0, 0):
-            break
     if keyboard.is_pressed('q'):
         break
-    first_round = False
 f.leftClick(1000, 500)
 print("")
 print("The game ended!")

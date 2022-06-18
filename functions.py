@@ -59,7 +59,7 @@ def append_to_list(type, x, y, known, flags, empties, ones, twos, threes, fours,
         known.append((x, y))
 
 def scan_field(img, x_pos, y_pos, known, empties, ones, twos, threes, fours, fives, sixes, sevens, eights, flags):
-    field = [""] * 16
+    field = [""] * len(y_pos)
     for iy, y in enumerate(y_pos):
         for x in x_pos:
             col = color(img, x, y)
@@ -70,7 +70,9 @@ def scan_field(img, x_pos, y_pos, known, empties, ones, twos, threes, fours, fiv
 def color(img, x, y):
     col = img[x, y]
     col_2 = img[x, y+1]
-    if img[x-12, y-12] == unknown:
+    if img[x-10, y-8] == three:
+        return "S"
+    elif img[x-12, y-12] == unknown:
         if img[x-1, y+5][0] == 21:
             return "!"
         return "/"
