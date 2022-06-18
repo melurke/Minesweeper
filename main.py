@@ -60,10 +60,9 @@ while True:
     if known == known_fields:
         print("Taking guess:")
         guess = f.guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights)
-        try:
-            f.leftClick(guess[0], guess[1])
-        except:
-            pass
+        f.leftClick(guess[0], guess[1])
+        if img[guess[0]-10, guess[1]-8][0:3] == (255, 0, 0):
+            break
     if keyboard.is_pressed('q'):
         break
     first_round = False
