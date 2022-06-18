@@ -1,9 +1,9 @@
 # Minesweeper
 
 Bot that plays Minesweeper on https://minesweeperonline.com/
-The game should be played with the compiler in the right half of the screen and the website on the left halgf.
+The game should be played with the compiler in the right half of the screen and the website on the left half.
 
-main.py -> Main program that plays the game
+expert.py / intermediate.py / beginner.py -> Main programs that play the game in the different difficulty levels of the site
 
 functions.py -> Function definitions for the main program
 
