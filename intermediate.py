@@ -8,14 +8,8 @@ x_pos = [76, 104, 132, 160, 188, 216, 244, 272, 300, 328, 356, 384, 412, 440, 46
 y_pos = [235, 263, 291, 319, 347, 375, 403, 431, 459, 487, 515, 543, 571, 599, 627, 655]
 end_game = False
 
-while True:
-    f.leftClick(287, 174)
-    f.leftClick(272, 429)
-    time.sleep(0.2)
-    while not keyboard.is_pressed('l') and not keyboard.is_pressed('k'): # Press l to generate a new starting position / Press k to use the given starting position
-        time.sleep(0.02)
-    if keyboard.is_pressed('k'):
-        break
+f.leftClick(287, 174)
+f.leftClick(272, 429)
 
 while True:
     no_more_moves = True
