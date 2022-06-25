@@ -1,4 +1,3 @@
-from numpy import zeros
 import win32api
 import time
 import win32con
@@ -104,16 +103,20 @@ def neighbors(x, x_pos, y, y_pos):
                 if x_ in x_pos and y_ in y_pos:
                     n.append((x_, y_))
     return n
+
+def empty_neighbors_of_field(neighbors, known):
+    empty_neighbors = []
+    for n in neighbors:
+        if not n in known:
+            empty_neighbors.append(n)
+    return empty_neighbors
     
 def flags(neighbors, num_of_neighbors, known, flags):
-    empty_n = []
+    empty_n = empty_neighbors_of_field(neighbors, known)
     num_of_empties = 0
 
     for N in neighbors:
-        if not N in known:
-            num_of_empties += 1
-            empty_n.append(N)
-        elif N in flags:
+        if not N in known or N in flags:
             num_of_empties += 1
     if num_of_empties == num_of_neighbors:
         for C in empty_n:
@@ -127,12 +130,11 @@ def no_mines(neighbors, known, flags, num_of_neighbors):
         if n in flags:
             num_of_flags += 1
     if num_of_flags == num_of_neighbors:
-        num_of_empty_neighbors = 0
-        empty_neighbors = []
+        empty_neighbors = empty_neighbors_of_field(neighbors, known)
+        num_of_empty_neighbors = len(empty_neighbors)
         for n in neighbors:
             if not n in known:
                 num_of_empty_neighbors += 1
-                empty_neighbors.append(n)
                 leftClick(n[0], n[1])
                 known.append(n)
         return [empty_neighbors, True]
@@ -140,7 +142,7 @@ def no_mines(neighbors, known, flags, num_of_neighbors):
 
 def type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags):
     pos = (x, y)
-    T = ""
+    T = "0"
     if not pos in known:
         T = "/"
     elif pos in empties:
@@ -165,7 +167,71 @@ def type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, e
         T = "8"
     return T
 
+def advanced_logic(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights):
+    print("Using advanced logic:")
+    made_guess = False
+    for y in y_pos:
+        for x in x_pos:
+            if (x, y) in known and not (x, y) in flags and not (x, y) in empties:
+                field_neighbors = neighbors(x, x_pos, y, y_pos)
+                num_of_used_flags = 0
+                empty_neighbors = []
+                known_neighbors = []
+                for n in field_neighbors:
+                    if n in flags:
+                        num_of_used_flags += 1
+                    elif n in empties:
+                        empty_neighbors.append(n)
+                    else:
+                        known_neighbors.append(n)
+                num_of_empty_neighbors = len(empty_neighbors)
+                try:
+                    num_of_flags = int(type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags))
+                except ValueError:
+                    print(type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags), x, y)
+                    num_of_flags = 11
+                num_of_needed_flags = num_of_flags - num_of_used_flags
+                if num_of_empty_neighbors > num_of_needed_flags:
+                    for n in known_neighbors:
+                        neighbor_neighbors = neighbors(n[0], x_pos, n[1], y_pos)
+                        num_of_used_neighbor_flags = 0
+                        for N in neighbor_neighbors:
+                            if N in flags:
+                                num_of_used_neighbor_flags += 1
+                        try:
+                            num_of_neighbor_flags = int(type(n[0], n[1], known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags))
+                        except ValueError:
+                            print(type(n[0], n[1], known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags), x, y)
+                            num_of_neighbor_flags = 11
+                        num_of_needed_neighbor_flags = num_of_neighbor_flags - num_of_used_neighbor_flags
+                        empty_neighbors_of_neighbors = empty_neighbors_of_field(neighbor_neighbors, known)
+                        break_loop = False
+                        common_neighbors = []
+                        for N in field_neighbors:
+                            if not N in empty_neighbors_of_neighbors:
+                                break_loop = True
+                                break
+                            else:
+                                common_neighbors.append(N)
+                        new_neighbors = []
+                        for N in empty_neighbors_of_neighbors:
+                            if not N in common_neighbors:
+                                new_neighbors.append(N)
+                        if break_loop:
+                            if len(new_neighbors) == num_of_needed_neighbor_flags:
+                                for N in new_neighbors:
+                                    rightClick(N[0], N[1])
+                                    print("Flag", N)
+                                    made_guess = True
+                            elif num_of_needed_flags == num_of_needed_neighbor_flags:
+                                for N in new_neighbors:
+                                    leftClick(N[0], N[1])
+                                    print("Safe", N)
+                                    made_guess = True
+    return made_guess
+
 def guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights):
+    print("Taking guess:")
     probabilities = []
     for y in y_pos:
         for x in x_pos:

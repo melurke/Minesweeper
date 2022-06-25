@@ -56,11 +56,13 @@ while True:
         if not C in flags and not C in empties:
             num_of_neighbors = int(f.type(C[0], C[1], known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags))
             n = f.no_mines(f.neighbors(C[0], x_pos, C[1], y_pos), known, flags, num_of_neighbors)
-
+    
+   
     if known == known_fields:
-        print("Taking guess:")
-        guess = f.guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights)
-        f.leftClick(guess[0], guess[1])
+        made_guess = f.advanced_logic(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights)
+        if not made_guess:
+            guess = f.guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights)
+            f.leftClick(guess[0], guess[1])
     if keyboard.is_pressed('q'):
         break
     
