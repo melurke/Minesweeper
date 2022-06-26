@@ -63,6 +63,8 @@ while True:
         if not made_guess:
             guess = f.guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights)
             f.leftClick(guess[0], guess[1])
+        else:
+            break
     if keyboard.is_pressed('q'):
         break
     

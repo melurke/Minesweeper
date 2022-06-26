@@ -171,63 +171,63 @@ def advanced_logic(x_pos, y_pos, known, empties, flags, ones, twos, threes, four
     print("Using advanced logic:")
     made_guess = False
     for y in y_pos:
-        for x in x_pos:
-            if (x, y) in known and not (x, y) in flags and not (x, y) in empties:
-                field_neighbors = neighbors(x, x_pos, y, y_pos)
-                num_of_used_flags = 0
-                empty_neighbors = []
-                known_neighbors = []
-                for n in field_neighbors:
-                    if n in flags:
-                        num_of_used_flags += 1
-                    elif n in empties:
-                        empty_neighbors.append(n)
-                    else:
-                        known_neighbors.append(n)
-                num_of_empty_neighbors = len(empty_neighbors)
-                try:
-                    num_of_flags = int(type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags))
-                except ValueError:
-                    print(type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags), x, y)
-                    num_of_flags = 11
-                num_of_needed_flags = num_of_flags - num_of_used_flags
-                if num_of_empty_neighbors > num_of_needed_flags:
-                    for n in known_neighbors:
-                        neighbor_neighbors = neighbors(n[0], x_pos, n[1], y_pos)
-                        num_of_used_neighbor_flags = 0
-                        for N in neighbor_neighbors:
-                            if N in flags:
-                                num_of_used_neighbor_flags += 1
-                        try:
-                            num_of_neighbor_flags = int(type(n[0], n[1], known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags))
-                        except ValueError:
-                            print(type(n[0], n[1], known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags), x, y)
-                            num_of_neighbor_flags = 11
-                        num_of_needed_neighbor_flags = num_of_neighbor_flags - num_of_used_neighbor_flags
-                        empty_neighbors_of_neighbors = empty_neighbors_of_field(neighbor_neighbors, known)
-                        break_loop = False
-                        common_neighbors = []
-                        for N in field_neighbors:
-                            if not N in empty_neighbors_of_neighbors:
-                                break_loop = True
-                                break
+        if not made_guess:
+            for x in x_pos:
+                if not made_guess:
+                    if (x, y) in known and not (x, y) in flags and not (x, y) in empties:
+                        field_neighbors = neighbors(x, x_pos, y, y_pos)
+                        num_of_used_flags = 0
+                        empty_neighbors = []
+                        known_neighbors = []
+                        for n in field_neighbors:
+                            if n in flags:
+                                num_of_used_flags += 1
+                            elif n in empties:
+                                empty_neighbors.append(n)
                             else:
-                                common_neighbors.append(N)
-                        new_neighbors = []
-                        for N in empty_neighbors_of_neighbors:
-                            if not N in common_neighbors:
-                                new_neighbors.append(N)
-                        if break_loop:
-                            if len(new_neighbors) == num_of_needed_neighbor_flags:
-                                for N in new_neighbors:
-                                    rightClick(N[0], N[1])
-                                    print("Flag", N)
-                                    made_guess = True
-                            elif num_of_needed_flags == num_of_needed_neighbor_flags:
-                                for N in new_neighbors:
-                                    leftClick(N[0], N[1])
-                                    print("Safe", N)
-                                    made_guess = True
+                                known_neighbors.append(n)
+                        num_of_empty_neighbors = len(empty_neighbors)
+                        num_of_flags = int(type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags))
+                        num_of_needed_flags = num_of_flags - num_of_used_flags
+                        if num_of_empty_neighbors > num_of_needed_flags:
+                            for n in known_neighbors:
+                                if not made_guess:
+                                    neighbor_neighbors = neighbors(n[0], x_pos, n[1], y_pos)
+                                    num_of_used_neighbor_flags = 0
+                                    for N in neighbor_neighbors:
+                                        if N in flags:
+                                            num_of_used_neighbor_flags += 1
+                                    try:
+                                        num_of_neighbor_flags = int(type(n[0], n[1], known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags))
+                                    except ValueError:
+                                        num_of_neighbor_flags = 11
+                                    num_of_needed_neighbor_flags = num_of_neighbor_flags - num_of_used_neighbor_flags
+                                    empty_neighbors_of_neighbors = empty_neighbors_of_field(neighbor_neighbors, known)
+                                    break_loop = False
+                                    common_neighbors = []
+                                    for N in field_neighbors:
+                                        if not N in empty_neighbors_of_neighbors:
+                                            break_loop = True
+                                            break
+                                        else:
+                                            common_neighbors.append(N)
+                                    new_neighbors = []
+                                    for N in empty_neighbors_of_neighbors:
+                                        if not N in common_neighbors:
+                                            new_neighbors.append(N)
+                                    if not break_loop:
+                                        if len(new_neighbors) == num_of_needed_neighbor_flags:
+                                            for N in new_neighbors:
+                                                rightClick(N[0], N[1])
+                                                print("Flag", (x_pos.index(N[0]), y_pos.index(N[1])))
+                                                made_guess = True
+                                        elif num_of_needed_flags == num_of_needed_neighbor_flags:
+                                            for N in new_neighbors:
+                                                leftClick(N[0], N[1])
+                                                print("Safe", (x_pos.index(N[0]), y_pos.index(N[1])))
+                                                made_guess = True
+    print(made_guess)
+    print("")
     return made_guess
 
 def guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights):
