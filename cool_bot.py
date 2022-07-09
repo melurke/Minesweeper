@@ -12,3 +12,7 @@ def click(x, y):
 while not keyboard.is_pressed('q'):
     click(188, 178)
     click(188, 348)
+    click(101, 262)
+    click(101, 430)
+    click(271, 262)
+    click(271, 430)

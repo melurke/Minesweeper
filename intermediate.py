@@ -2,7 +2,6 @@ import pyautogui
 from PIL import Image
 import functions as f
 import keyboard
-import time
 
 x_pos = [76, 104, 132, 160, 188, 216, 244, 272, 300, 328, 356, 384, 412, 440, 468, 496]
 y_pos = [235, 263, 291, 319, 347, 375, 403, 431, 459, 487, 515, 543, 571, 599, 627, 655]

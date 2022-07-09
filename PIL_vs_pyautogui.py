@@ -1,4 +1,3 @@
-import pyautogui
 from PIL import Image
 
 unknown = (255, 255, 255)
