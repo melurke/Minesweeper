@@ -35,7 +35,7 @@ while True:
 
     if end_game:
         break
-    
+
     for row in field:
         print(row)
     print("")
@@ -55,8 +55,8 @@ while True:
         if not C in flags and not C in empties:
             num_of_neighbors = int(f.type(C[0], C[1], known, ones, twos, threes, fours, fives, sixes, sevens, eights, empties, flags))
             n = f.no_mines(f.neighbors(C[0], x_pos, C[1], y_pos), known, flags, num_of_neighbors)
-    
-   
+
+
     if known == known_fields:
         made_guess = f.advanced_logic(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights)
         if not made_guess:
@@ -66,7 +66,7 @@ while True:
             break
     if keyboard.is_pressed('q'):
         break
-    
+
 f.leftClick(1000, 500)
 print("")
 print("The game ended!")
