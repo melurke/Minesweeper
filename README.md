@@ -3,7 +3,7 @@
 Bot that plays Minesweeper on https://minesweeperonline.com/
 The game should be played with the compiler on the right half of the screen and the website on the left half.
 
-The record for expert mode is 20 seconds, which is 19 seconds faster than the record before. Unfortunately you can't see my name on the website because I got banned from showing up in the scoreboard because the bot was too fast (but here is a picture from the website directly after the record was made).
+The record for expert mode is 19 seconds, which is 20 seconds faster than the all time record before (set by a human). Unfortunately you can't see my name on the website because I got banned from showing up in the scoreboard because the bot was too fast (but here is a picture from the website directly after the record was made).
 
 <img src="record.png">
 
