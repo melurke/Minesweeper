@@ -168,7 +168,6 @@ def type(x, y, known, ones, twos, threes, fours, fives, sixes, sevens, eights, e
     return T
 
 def advanced_logic(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights):
-    print("Using advanced logic:")
     made_guess = False
     for y in y_pos:
         if not made_guess:
@@ -219,19 +218,14 @@ def advanced_logic(x_pos, y_pos, known, empties, flags, ones, twos, threes, four
                                         if len(new_neighbors) == num_of_needed_neighbor_flags:
                                             for N in new_neighbors:
                                                 rightClick(N[0], N[1])
-                                                print("Flag", (x_pos.index(N[0]), y_pos.index(N[1])))
                                                 made_guess = True
                                         elif num_of_needed_flags == num_of_needed_neighbor_flags:
                                             for N in new_neighbors:
                                                 leftClick(N[0], N[1])
-                                                print("Safe", (x_pos.index(N[0]), y_pos.index(N[1])))
                                                 made_guess = True
-    print(made_guess)
-    print("")
     return made_guess
 
 def guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives, sixes, sevens, eights):
-    print("Taking guess:")
     probabilities = []
     for y in y_pos:
         for x in x_pos:
@@ -270,6 +264,5 @@ def guess(x_pos, y_pos, known, empties, flags, ones, twos, threes, fours, fives,
     x_index = min_index % 30
     y_index = int((min_index - x_index) / 30)
     coords = (x_pos[x_index], y_pos[y_index])
-    print(probabilities)
     print(coords, probabilities[min_index])
     return coords
